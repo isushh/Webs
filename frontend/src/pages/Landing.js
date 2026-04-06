@@ -145,11 +145,20 @@ export default function Landing() {
           </motion.div>
 
           {/* ── Resume → Certification floating glass card ── */}
-          <div className="hidden lg:flex items-center justify-center flex-shrink-0">
+          {/* Desktop: beside hero text */}
+          <div className="hidden md:flex items-center justify-center flex-shrink-0">
             <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
               <ResumeToCert />
             </motion.div>
           </div>
+          </div>
+
+          {/* Mobile: centered below hero text */}
+          <div className="flex md:hidden justify-center mt-10">
+            <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transform: "scale(0.85)" }}>
+              <ResumeToCert />
+            </motion.div>
           </div>
         </motion.div>
 

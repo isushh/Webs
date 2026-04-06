@@ -49,12 +49,12 @@ export default function ResumeToCert() {
   return (
     <motion.div
       /* ── Entrance: sweeps from behind the hero (left-center) to the right ── */
-      initial={{ opacity: 0, x: -280, scale: 0.5, filter: "blur(20px)", rotate: -8 }}
+      initial={{ opacity: 0, x: -160, scale: 0.6, filter: "blur(16px)", rotate: -5 }}
       animate={hasEntered
         ? { opacity: 1, x: 0, scale: 1, filter: "blur(0px)", rotate: 0 }
-        : { opacity: 0, x: -280, scale: 0.5, filter: "blur(20px)", rotate: -8 }
+        : { opacity: 0, x: -160, scale: 0.6, filter: "blur(16px)", rotate: -5 }
       }
-      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       className="relative w-[280px] h-[370px]"
       data-testid="resume-to-cert"
     >
