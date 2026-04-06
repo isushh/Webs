@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 import { Upload, Linkedin, Github, Globe, Palette, X, FileText, ArrowRight, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
@@ -14,7 +15,7 @@ const SKILL_OPTIONS = [
 ];
 
 export default function RegisterStudent() {
-  const { register, token } = useAuth();
+  const { register, token, googleCallback } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -26,13 +27,6 @@ export default function RegisterStudent() {
   });
 
   const set = (key, val) => setForm(prev => ({ ...prev, [key]: val }));
-  const toggleSkill = (s) => set("skills", form.skills.includes(s) ? form.skills.filter(x => x !== s) : [...form.skills, s]);
-
-  const handleGoogleRegister = () => {
-    localStorage.setItem("nexalign_oauth_role", "student");
-    const redirectUrl = window.location.origin + "/dashboard";
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
-  };
 
   const handleDrop = useCallback((e) => {
     e.preventDefault();
@@ -117,12 +111,24 @@ export default function RegisterStudent() {
                 <label className="text-xs text-white/50 mb-1.5 block">Confirm Password *</label>
                 <input type="password" required value={form.confirmPassword} onChange={e => set("confirmPassword", e.target.value)} className="glass-input w-full px-4 py-2.5 rounded-lg text-sm" placeholder="Confirm password" data-testid="student-confirm-password" />
               </div>
-              <button type="button" onClick={() => handleGoogleRegister()}
-                className="w-full glass-btn py-3 rounded-lg text-sm text-white/80 flex items-center justify-center gap-2 mt-2"
-                data-testid="student-google-register">
-                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.462.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
-                Register with Google
-              </button>
+              <div className="flex justify-center" data-testid="student-google-register">
+                <GoogleLogin
+                  onSuccess={async (credentialResponse) => {
+                    try {
+                      await googleCallback(credentialResponse.credential, "student");
+                      toast.success("Signed in with Google!");
+                      navigate("/dashboard", { replace: true });
+                    } catch (err) {
+                      toast.error("Google sign-in failed");
+                    }
+                  }}
+                  onError={() => toast.error("Google sign-in failed")}
+                  theme="filled_black"
+                  shape="pill"
+                  size="large"
+                  text="signup_with"
+                />
+              </div>
               <button type="button" onClick={() => setStep(2)} className="w-full py-3 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-all flex items-center justify-center gap-2" data-testid="student-next-step1">
                 Next <ArrowRight size={16} />
               </button>

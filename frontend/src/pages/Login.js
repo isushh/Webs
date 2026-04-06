@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Shield } from "lucide-react";
 import { toast } from "sonner";
 
@@ -13,18 +14,21 @@ function formatError(detail) {
 }
 
 export default function Login() {
-  const { login, adminRegister } = useAuth();
+  const { login, adminRegister, googleCallback } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState("login");
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", name: "", secret_code: "" });
 
-  const handleGoogleLogin = (role) => {
-    localStorage.setItem("nexalign_oauth_role", role);
-    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-    const redirectUrl = window.location.origin + "/dashboard";
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      await googleCallback(credentialResponse.credential, "student");
+      toast.success("Welcome!");
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      toast.error(formatError(err.response?.data?.detail));
+    }
   };
 
   const handleLogin = async (e) => {
@@ -112,12 +116,17 @@ export default function Login() {
                 <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10" /></div>
                 <div className="relative flex justify-center"><span className="px-3 bg-[#050505]/50 backdrop-blur text-xs text-white/40">or continue with</span></div>
               </div>
-              <button type="button" onClick={() => handleGoogleLogin("student")}
-                className="w-full glass-btn py-3 rounded-lg text-sm text-white/80 hover:text-white flex items-center justify-center gap-2"
-                data-testid="google-login-btn">
-                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.462.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
-                Google Sign In
-              </button>
+              <div className="flex justify-center" data-testid="google-login-btn">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => toast.error("Google sign-in failed")}
+                  theme="filled_black"
+                  shape="pill"
+                  size="large"
+                  width="100%"
+                  text="continue_with"
+                />
+              </div>
               <p className="text-center text-sm text-white/40 mt-4">
                 Don't have an account? <Link to="/register/student" className="text-cyan-400 hover:text-cyan-300" data-testid="goto-register">Sign up</Link>
               </p>

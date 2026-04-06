@@ -1,6 +1,7 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import Landing from "@/pages/Landing";
 import Login from "@/pages/Login";
 import RegisterStudent from "@/pages/RegisterStudent";
@@ -10,19 +11,13 @@ import CompanyDashboard from "@/pages/CompanyDashboard";
 import AdminDashboard from "@/pages/AdminDashboard";
 import BrowseInternships from "@/pages/BrowseInternships";
 import InternshipDetail from "@/pages/InternshipDetail";
-import AuthCallback from "@/pages/AuthCallback";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ChatBot from "@/components/ChatBot";
 import { Toaster } from "@/components/ui/sonner";
 
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
 function AppRouter() {
-  const location = useLocation();
-
-  // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-  if (location.hash?.includes("session_id=")) {
-    return <AuthCallback />;
-  }
-
   return (
     <>
       <Routes>
@@ -55,11 +50,13 @@ function DashboardRouter() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppRouter />
-      </AuthProvider>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppRouter />
+        </AuthProvider>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   );
 }
 

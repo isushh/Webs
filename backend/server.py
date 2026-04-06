@@ -15,6 +15,8 @@ import jwt as pyjwt
 import secrets
 import requests as http_requests
 import asyncio
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional
 from datetime import datetime, timezone, timedelta
@@ -31,6 +33,7 @@ JWT_SECRET = os.environ.get('JWT_SECRET', secrets.token_hex(32))
 JWT_ALGORITHM = "HS256"
 ADMIN_SECRET_CODE = os.environ.get('ADMIN_SECRET_CODE', 'nexalign-admin-2024')
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '')
 
 # Object Storage
 STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
@@ -174,7 +177,7 @@ class AdminRegisterRequest(BaseModel):
     secret_code: str
 
 class GoogleCallbackRequest(BaseModel):
-    session_id: str
+    credential: str
     role: Optional[str] = "student"
 
 class UpdateProfileRequest(BaseModel):
@@ -307,18 +310,18 @@ async def admin_register(req: AdminRegisterRequest, response: Response):
 @api_router.post("/auth/google-callback")
 async def google_callback(req: GoogleCallbackRequest, response: Response):
     try:
-        resp = http_requests.get(
-            "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
-            headers={"X-Session-ID": req.session_id}, timeout=10
+        # Verify the Google ID token using google-auth library
+        idinfo = id_token.verify_oauth2_token(
+            req.credential, google_requests.Request(), GOOGLE_CLIENT_ID
         )
-        resp.raise_for_status()
-        google_data = resp.json()
+        if idinfo["iss"] not in ["accounts.google.com", "https://accounts.google.com"]:
+            raise ValueError("Invalid issuer")
     except Exception as e:
-        logger.error(f"Google OAuth error: {e}")
-        raise HTTPException(status_code=400, detail="Failed to verify Google session")
-    email = google_data["email"].lower()
-    name = google_data.get("name", "")
-    picture = google_data.get("picture", "")
+        logger.error(f"Google OAuth token verification failed: {e}")
+        raise HTTPException(status_code=400, detail="Invalid Google token")
+    email = idinfo["email"].lower()
+    name = idinfo.get("name", "")
+    picture = idinfo.get("picture", "")
     existing = await db.users.find_one({"email": email}, {"_id": 0})
     if existing:
         user = existing

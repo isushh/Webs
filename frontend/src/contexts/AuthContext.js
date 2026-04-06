@@ -21,12 +21,6 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const checkAuth = useCallback(async () => {
-    // CRITICAL: If returning from OAuth callback, skip the /me check.
-    // AuthCallback will exchange the session_id and establish the session first.
-    if (window.location.hash?.includes("session_id=")) {
-      setLoading(false);
-      return;
-    }
     try {
       const api = axiosAuth();
       const { data } = await api.get("/auth/me");
@@ -74,8 +68,8 @@ export function AuthProvider({ children }) {
     return data;
   };
 
-  const googleCallback = async (sessionId, role) => {
-    const { data } = await axios.post(`${API}/auth/google-callback`, { session_id: sessionId, role }, { withCredentials: true });
+  const googleCallback = async (credential, role) => {
+    const { data } = await axios.post(`${API}/auth/google-callback`, { credential, role }, { withCredentials: true });
     if (data.access_token) {
       localStorage.setItem("access_token", data.access_token);
       setToken(data.access_token);
