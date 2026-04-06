@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
-import { Plus, Users, Briefcase, Clock, CheckCircle2, XCircle, X, ShieldCheck, AlertTriangle } from "lucide-react";
+import { Plus, Users, Briefcase, Clock, CheckCircle2, XCircle, X, ShieldCheck, Trash2, Edit3, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -11,7 +11,9 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const SKILL_OPTIONS = ["JavaScript", "Python", "React", "Node.js", "Java", "C++", "TypeScript", "Flutter", "Django", "MongoDB", "SQL", "AWS", "Docker", "Figma", "UI/UX Design", "Data Science", "Machine Learning", "Content Writing", "Marketing"];
 
 export default function CompanyDashboard() {
-  const { user, token } = useAuth();
+  const { user, token, deleteInternship } = useAuth();
+
+// Add this helper function to handle the click
   const [tab, setTab] = useState("internships");
   const [internships, setInternships] = useState([]);
   const [applications, setApplications] = useState([]);
@@ -28,6 +30,18 @@ export default function CompanyDashboard() {
         axios.get(`${API}/internships`, { withCredentials: true, headers }),
         axios.get(`${API}/applications`, { withCredentials: true, headers }),
       ]);
+  
+    const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this internship? This cannot be undone.")) return;
+
+  try {
+    await deleteInternship(id);
+    toast.success("Internship deleted successfully"
+    window.location.reload(); // Quickest way to refresh the list
+  } catch (err) {
+    toast.error("Failed to delete internship");
+  }
+};
       const myInternships = (intRes.data.internships || []).filter(i => i.company_user_id === user?.user_id);
       setInternships(myInternships);
       setApplications(appRes.data.applications || []);
@@ -127,6 +141,26 @@ export default function CompanyDashboard() {
                     <span className="text-white/40">{intern.applications_count} applications</span>
                     <span className={intern.status === "active" ? "text-emerald-400" : "text-red-400"}>{intern.status}</span>
                   </div>
+                  <div className="flex items-center gap-2 ml-auto">
+  {/* EDIT BUTTON - Stylish Cyan Glass Look */}
+  <button 
+    onClick={() => navigate(`/edit-internship/${internship._id}`)}
+    className="p-2 text-cyan-400 hover:bg-cyan-400/10 rounded-lg border border-cyan-400/20 transition-all"
+    title="Edit Internship"
+  >
+    <Edit3 size={16} />
+  </button>
+
+  {/* DELETE BUTTON - Stylish Red Glass Look */}
+  <button 
+    onClick={() => handleDelete(internship._id)}
+    className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg border border-red-500/20 transition-all"
+    title="Delete Internship"
+  >
+    <Trash2 size={16} />
+  </button>
+</div>
+      
                 </div>
                 {intern.skills_required?.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-3">
