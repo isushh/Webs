@@ -94,7 +94,7 @@ export default function Landing() {
       {/* ══════════ Hero Section with parallax ══════════ */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" data-testid="hero-section">
         <Hero3D />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-transparent to-[#050505]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-transparent to-transparent" />
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 w-full">
           <div className="flex items-center justify-between gap-8">
           <motion.div initial="hidden" animate="visible" className="max-w-2xl flex-1">
@@ -154,22 +154,12 @@ export default function Landing() {
           </div>
 
           {/* Mobile: centered below hero text */}
-          <div className="flex md:hidden justify-center mt-10">
+          <div className="flex md:hidden justify-center mt-10 mb-16 pb-8">
             <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               style={{ transform: "scale(0.85)" }}>
               <ResumeToCert />
             </motion.div>
           </div>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
-          <span className="text-white/20 text-xs tracking-widest uppercase">Scroll</span>
-          <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-5 h-8 rounded-full border border-white/20 flex justify-center pt-1.5">
-            <motion.div className="w-1 h-1.5 rounded-full bg-cyan-400" />
-          </motion.div>
         </motion.div>
       </section>
 
