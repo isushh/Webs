@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 import axios from "axios";
 
 const AuthContext = createContext(null);
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const API = `${process.env.REACT_APP_https://webs-fq0b.onrender.com}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
