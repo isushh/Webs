@@ -37,11 +37,36 @@ const stepPopIn = {
   }),
 };
 
-/* Pop effects — more pronounced for clicks and scrolls */
-const tapPop = { scale: 0.92, transition: { type: "spring", stiffness: 400, damping: 10 } };
-const hoverPop = { scale: 1.04, y: -4, transition: { type: "spring", stiffness: 300, damping: 15 } };
+/* Pop effects — pronounced for clicks, with spring physics */
+const tapPop = { scale: 0.9, transition: { type: "spring", stiffness: 500, damping: 15 } };
+const hoverPop = { scale: 1.05, y: -4, transition: { type: "spring", stiffness: 300, damping: 15 } };
 const cardHoverPop = { scale: 1.03, y: -8, boxShadow: "0 16px 48px rgba(6, 182, 212, 0.15)", borderColor: "rgba(6, 182, 212, 0.5)", transition: { type: "spring", stiffness: 300, damping: 18 } };
 const cardTapPop = { scale: 0.96, y: 0, transition: { type: "spring", stiffness: 400, damping: 12 } };
+
+/* Animated button wrapper — adds shimmer + ripple on hover */
+function AnimatedButton({ children, variant = "primary", to, testId }) {
+  return (
+    <motion.div whileHover={hoverPop} whileTap={tapPop} className="relative">
+      <Link to={to} className={`relative inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold overflow-hidden group ${
+        variant === "primary"
+          ? "bg-cyan-500 text-black hover:bg-cyan-400"
+          : "glass-btn text-white"
+      }`} data-testid={testId}>
+        {/* Shimmer sweep on hover */}
+        <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+        {/* Glow pulse behind */}
+        {variant === "primary" && (
+          <motion.span
+            className="absolute inset-0 rounded-lg pointer-events-none"
+            animate={{ boxShadow: ["0 0 0px rgba(6,182,212,0)", "0 0 25px rgba(6,182,212,0.35)", "0 0 0px rgba(6,182,212,0)"] }}
+            transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}
+          />
+        )}
+        <span className="relative z-10 flex items-center gap-2">{children}</span>
+      </Link>
+    </motion.div>
+  );
+}
 
 const features = [
   { icon: ShieldCheck, title: "100% Verified Companies", desc: "Every company is manually verified by our team before they can post internships.", color: "text-emerald-400", bg: "from-emerald-500/20 to-emerald-500/5" },
@@ -97,16 +122,12 @@ export default function Landing() {
             </motion.p>
 
             <motion.div variants={fadeUp} custom={3} className="mt-8 flex flex-wrap gap-4">
-              <motion.div whileHover={hoverPop} whileTap={tapPop}>
-                <Link to="/register/student" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-all hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]" data-testid="hero-student-cta">
-                  Find Internships <ArrowRight size={16} />
-                </Link>
-              </motion.div>
-              <motion.div whileHover={hoverPop} whileTap={tapPop}>
-                <Link to="/register/company" className="glass-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium" data-testid="hero-company-cta">
-                  Post an Internship <Sparkles size={14} className="text-emerald-400" />
-                </Link>
-              </motion.div>
+              <AnimatedButton variant="primary" to="/register/student" testId="hero-student-cta">
+                Find Internships <ArrowRight size={16} />
+              </AnimatedButton>
+              <AnimatedButton variant="glass" to="/register/company" testId="hero-company-cta">
+                Post an Internship <Sparkles size={14} className="text-emerald-400" />
+              </AnimatedButton>
             </motion.div>
 
             <motion.div variants={fadeUp} custom={4} className="mt-12 flex items-center gap-6 text-xs text-white/40">
@@ -316,16 +337,12 @@ export default function Landing() {
               transition={{ delay: 0.5 }}
               className="relative flex flex-wrap justify-center gap-4"
             >
-              <motion.div whileHover={hoverPop} whileTap={tapPop}>
-                <Link to="/register/student" className="inline-flex items-center gap-2 px-8 py-3 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-all hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]" data-testid="cta-student-btn">
-                  I'm a Student <ArrowRight size={16} />
-                </Link>
-              </motion.div>
-              <motion.div whileHover={hoverPop} whileTap={tapPop}>
-                <Link to="/register/company" className="glass-btn inline-flex items-center gap-2 px-8 py-3 rounded-lg text-white font-medium" data-testid="cta-company-btn">
-                  I'm a Company <ArrowRight size={16} />
-                </Link>
-              </motion.div>
+              <AnimatedButton variant="primary" to="/register/student" testId="cta-student-btn">
+                I'm a Student <ArrowRight size={16} />
+              </AnimatedButton>
+              <AnimatedButton variant="glass" to="/register/company" testId="cta-company-btn">
+                I'm a Company <ArrowRight size={16} />
+              </AnimatedButton>
             </motion.div>
           </motion.div>
         </div>
