@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 import axios from "axios";
 
 const AuthContext = createContext(null);
-const API = `${process.env.REACT_APP_https://webs-fq0b.onrender.com}
+const API = `${process.env.REACT_APP_https://webs-fq0b.onrender.com;}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -67,9 +67,14 @@ export function AuthProvider({ children }) {
     setUser(data.user);
     return data;
   };
-
-  const googleCallback = async (credential, role) => {
-    const { data } = await axios.post(`${API}/auth/google-callback`, { credential, role }, { withCredentials: true });
+const googleCallback = async (credential, role) => {
+  // We change 'credential' to 'token' to match your backend schema
+  const { data } = await axios.post(`${API}/auth/google-callback`, 
+    { token: credential, role }, 
+    { withCredentials: true }
+  );
+  // ... rest of your existing logic
+};
     if (data.access_token) {
       localStorage.setItem("access_token", data.access_token);
       setToken(data.access_token);
