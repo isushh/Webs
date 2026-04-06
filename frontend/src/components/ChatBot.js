@@ -49,7 +49,7 @@ export default function ChatBot() {
         {!open && (
           <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-lg hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-shadow"
+            className="fixed bottom-20 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-lg hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-shadow"
             data-testid="chatbot-toggle">
             <MessageCircle size={22} className="text-black" />
           </motion.button>
@@ -60,7 +60,7 @@ export default function ChatBot() {
       <AnimatePresence>
         {open && (
           <motion.div initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 w-[360px] max-h-[500px] glass-heavy rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-20 right-6 z-50 w-[360px] max-h-[500px] glass-heavy rounded-2xl shadow-2xl flex flex-col overflow-hidden"
             data-testid="chatbot-window">
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
