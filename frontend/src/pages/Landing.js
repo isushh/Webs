@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Hero3D from "@/components/Hero3D";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
+import ResumeToCert from "@/components/ResumeToCert";
 
 /* ── Slide-in variants per card direction ── */
 const slideFromLeft = {
@@ -36,9 +37,11 @@ const stepPopIn = {
   }),
 };
 
-/* Click micro-animation (whileTap) */
-const tapBounce = { scale: 0.95, transition: { duration: 0.1 } };
-const hoverLift = { y: -3, transition: { duration: 0.2 } };
+/* Pop effects — more pronounced for clicks and scrolls */
+const tapPop = { scale: 0.92, transition: { type: "spring", stiffness: 400, damping: 10 } };
+const hoverPop = { scale: 1.04, y: -4, transition: { type: "spring", stiffness: 300, damping: 15 } };
+const cardHoverPop = { scale: 1.03, y: -8, boxShadow: "0 16px 48px rgba(6, 182, 212, 0.15)", borderColor: "rgba(6, 182, 212, 0.5)", transition: { type: "spring", stiffness: 300, damping: 18 } };
+const cardTapPop = { scale: 0.96, y: 0, transition: { type: "spring", stiffness: 400, damping: 12 } };
 
 const features = [
   { icon: ShieldCheck, title: "100% Verified Companies", desc: "Every company is manually verified by our team before they can post internships.", color: "text-emerald-400", bg: "from-emerald-500/20 to-emerald-500/5" },
@@ -67,8 +70,9 @@ export default function Landing() {
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" data-testid="hero-section">
         <Hero3D />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-transparent to-[#050505]" />
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-          <motion.div initial="hidden" animate="visible" className="max-w-3xl">
+        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 w-full">
+          <div className="flex items-center justify-between gap-8">
+          <motion.div initial="hidden" animate="visible" className="max-w-2xl flex-1">
             <motion.div variants={fadeUp} custom={0}
               className="inline-flex items-center gap-2 glass-btn px-4 py-2 rounded-full mb-8">
               <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
@@ -93,12 +97,12 @@ export default function Landing() {
             </motion.p>
 
             <motion.div variants={fadeUp} custom={3} className="mt-8 flex flex-wrap gap-4">
-              <motion.div whileHover={hoverLift} whileTap={tapBounce}>
+              <motion.div whileHover={hoverPop} whileTap={tapPop}>
                 <Link to="/register/student" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-all hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]" data-testid="hero-student-cta">
                   Find Internships <ArrowRight size={16} />
                 </Link>
               </motion.div>
-              <motion.div whileHover={hoverLift} whileTap={tapBounce}>
+              <motion.div whileHover={hoverPop} whileTap={tapPop}>
                 <Link to="/register/company" className="glass-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium" data-testid="hero-company-cta">
                   Post an Internship <Sparkles size={14} className="text-emerald-400" />
                 </Link>
@@ -118,6 +122,14 @@ export default function Landing() {
               ))}
             </motion.div>
           </motion.div>
+
+          {/* ── Resume → Certification floating glass card ── */}
+          <div className="hidden lg:flex items-center justify-center flex-shrink-0">
+            <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
+              <ResumeToCert />
+            </motion.div>
+          </div>
+          </div>
         </motion.div>
 
         {/* Scroll indicator */}
@@ -155,9 +167,9 @@ export default function Landing() {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
                 variants={featureVariants[i]}
-                whileHover={{ y: -6, boxShadow: "0 12px 40px rgba(6, 182, 212, 0.12)", borderColor: "rgba(6, 182, 212, 0.4)" }}
-                whileTap={{ scale: 0.98 }}
-                className="glass-card p-8 group cursor-default"
+                whileHover={cardHoverPop}
+                whileTap={cardTapPop}
+                className="glass-card p-8 group cursor-pointer"
                 data-testid={`feature-card-${i}`}
               >
                 <motion.div
@@ -205,9 +217,9 @@ export default function Landing() {
                 viewport={{ once: true, margin: "-40px" }}
                 variants={stepPopIn}
                 custom={i}
-                whileHover={{ y: -8, boxShadow: "0 16px 48px rgba(6, 182, 212, 0.1)", borderColor: "rgba(6, 182, 212, 0.35)" }}
-                whileTap={{ scale: 0.97 }}
-                className="glass-card p-8 relative overflow-hidden group"
+                whileHover={cardHoverPop}
+                whileTap={cardTapPop}
+                className="glass-card p-8 relative overflow-hidden group cursor-pointer"
                 data-testid={`step-card-${i}`}
               >
                 {/* Animated step number */}
@@ -304,12 +316,12 @@ export default function Landing() {
               transition={{ delay: 0.5 }}
               className="relative flex flex-wrap justify-center gap-4"
             >
-              <motion.div whileHover={hoverLift} whileTap={tapBounce}>
+              <motion.div whileHover={hoverPop} whileTap={tapPop}>
                 <Link to="/register/student" className="inline-flex items-center gap-2 px-8 py-3 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-all hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]" data-testid="cta-student-btn">
                   I'm a Student <ArrowRight size={16} />
                 </Link>
               </motion.div>
-              <motion.div whileHover={hoverLift} whileTap={tapBounce}>
+              <motion.div whileHover={hoverPop} whileTap={tapPop}>
                 <Link to="/register/company" className="glass-btn inline-flex items-center gap-2 px-8 py-3 rounded-lg text-white font-medium" data-testid="cta-company-btn">
                   I'm a Company <ArrowRight size={16} />
                 </Link>
