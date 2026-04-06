@@ -1,7 +1,10 @@
+import { Edit3, Trash2 } from "lucide-react"; // Ensure these match the buttons you added
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom"; // If you used 'navigate' for the Edit button
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
-import { Plus, Users, Briefcase, Clock, CheckCircle2, XCircle, X, ShieldCheck, Trash2, Edit3, AlertTriangle } from "lucide-react";
+import { Plus, Users, Briefcase, Clock, CheckCircle2, XCircle, X, ShieldCheck, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -12,6 +15,8 @@ const SKILL_OPTIONS = ["JavaScript", "Python", "React", "Node.js", "Java", "C++"
 
 export default function CompanyDashboard() {
   const { user, token, deleteInternship } = useAuth();
+  const navigate = useNavigate(); // Add this line right below your 'useAuth' line
+  
 
 // Add this helper function to handle the click
   const [tab, setTab] = useState("internships");
