@@ -751,7 +751,7 @@ async def startup():
     except Exception as e:
         logger.error(f"Storage init failed (non-critical): {e}")
     # Write test credentials
-    os.makedirs("/app/memory", exist_ok=True)
+    os.makedirs("/app./memory", exist_ok=True)
     with open("/app/memory/test_credentials.md", "w") as f:
         f.write(f"# Nexalign Test Credentials\n\n## Admin\n- Email: {admin_email}\n- Password: {admin_password}\n- Role: admin\n\n")
         f.write(f"## Admin Secret Code\n- Code: {ADMIN_SECRET_CODE}\n\n")
