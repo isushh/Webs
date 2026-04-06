@@ -1,0 +1,101 @@
+{
+  "project_name": "Nexalign",
+  "domain": "Job Platform / Tech Startups",
+  "theme": "Dark",
+  "archetype": "7 (Electric & Neon) merged with 4 (Swiss & High Contrast) - Dark Mode",
+  "colors": {
+    "background": "#050505",
+    "foreground": "#F8FAFC",
+    "primary": "#06B6D4",
+    "primary_foreground": "#000000",
+    "secondary": "#10B981",
+    "secondary_foreground": "#000000",
+    "muted": "#1E293B",
+    "muted_foreground": "#94A3B8",
+    "accent": "#06B6D4",
+    "accent_foreground": "#000000",
+    "border": "#27272A",
+    "input": "#18181B",
+    "ring": "#06B6D4",
+    "card": "#0A0A0B",
+    "card_foreground": "#F8FAFC",
+    "glass": {
+      "background_light": "rgba(255, 255, 255, 0.03)",
+      "background_heavy": "rgba(255, 255, 255, 0.08)",
+      "border": "rgba(255, 255, 255, 0.1)",
+      "border_glow": "rgba(6, 182, 212, 0.3)",
+      "backdrop_blur": "blur(16px)"
+    }
+  },
+  "typography": {
+    "font_families": {
+      "headings": "'Outfit', sans-serif",
+      "body": "'Plus Jakarta Sans', sans-serif",
+      "mono": "'JetBrains Mono', monospace"
+    },
+    "scale": {
+      "h1": "text-5xl sm:text-6xl lg:text-7xl tracking-tighter font-bold",
+      "h2": "text-3xl sm:text-4xl tracking-tight font-semibold",
+      "h3": "text-2xl sm:text-3xl font-medium",
+      "h4": "text-xl sm:text-2xl font-medium",
+      "body": "text-base leading-relaxed text-foreground/80",
+      "small": "text-sm text-foreground/60"
+    }
+  },
+  "layout": {
+    "spacing_scale": "Tailwind standard (p-4 to p-32)",
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "bento_grid": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8",
+    "alignment": "Left-align forms, dashboards, and job listings. Center-align hero headings."
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg px-6 py-3 transition-all",
+      "glass": "backdrop-blur-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all shadow-lg rounded-lg",
+      "neon_outline": "bg-transparent border border-primary/50 text-primary hover:text-primary-foreground hover:bg-primary transition-colors hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] rounded-lg"
+    },
+    "cards": {
+      "glass_card": "backdrop-blur-2xl bg-white/[0.02] border border-white/10 rounded-2xl shadow-2xl hover:border-primary/50 hover:shadow-[0_8px_32px_rgba(6,182,212,0.1)] transition-all",
+      "flat_dark": "bg-[#0A0A0B] border border-white/10 rounded-xl"
+    },
+    "inputs": {
+      "glass": "bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary backdrop-blur-md rounded-lg text-white transition-all placeholder:text-white/40"
+    }
+  },
+  "motion": {
+    "hover": "transition-transform duration-300 ease-out hover:-translate-y-1",
+    "page_transition": "animate-in fade-in zoom-in duration-500",
+    "glass_hover": "hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all duration-300",
+    "stagger_children": "Use Framer Motion to stagger list items (job postings, companies) on enter"
+  },
+  "media": {
+    "images": [
+      {
+        "category": "hero_background",
+        "url": "https://static.prod-images.emergentagent.com/jobs/1264318a-53b6-4d06-8870-ec03dd90317f/images/f6825a940e7f3a89efe032ecda557342d74975de4dbb3e086d695775b324fef7.png",
+        "description": "3D abstract geometric shape floating in dark void, cyan and green glowing edges. Use as background for the hero section with a dark overlay (bg-black/40)."
+      },
+      {
+        "category": "tech_background",
+        "url": "https://static.prod-images.emergentagent.com/jobs/1264318a-53b6-4d06-8870-ec03dd90317f/images/6eb95cab97edfe3434d98fb5962f126b1552fc0775b4f6ad9a3499ae49a13545.png",
+        "description": "Dark sleek abstract background with subtle cyan/green grid lines and glassmorphism elements. Great for login pages or profile backgrounds."
+      },
+      {
+        "category": "student_testimonial",
+        "url": "https://images.unsplash.com/photo-1636190742981-8a2e4885da65?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2OTV8MHwxfHNlYXJjaHwyfHxzdHVkZW50JTIwd29ya2luZyUyMG9uJTIwbGFwdG9wJTIwZGFyayUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzc1NDcyMDI1fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Student working on laptop in dark environment. Use for About or How it Works section."
+      }
+    ],
+    "icons_strategy": "Use Lucide React icons. For company placeholder logos in the '100% Verified Companies' section, use bold geometric icons (e.g., Hexagon, Triangle, Zap, Command, Cloud) sized large (w-12 h-12) wrapped in a glassmorphic circle container."
+  },
+  "specific_instructions": {
+    "hero_section": "Implement a 3D Animated Hero Section. If possible, integrate Spline or React Three Fiber. If not, simulate 3D depth by placing 'hero_background' behind a heavy backdrop-blur (bg-black/50) overlay and use parallax scrolling on Framer Motion elements. The main headline should be massive and punchy.",
+    "student_login_registration": "Student auth flows MUST use heavy glassmorphism for the form container (`backdrop-blur-2xl bg-white/5 border border-white/10`). Integrate a glass-styled Drag-and-Drop Resume Upload zone within the registration step.",
+    "company_verification_flow": "Company profiles need a 'Verified' badge (Neon Green/Emerald). Companies post 'skill-based' internships, requiring specific form fields during the creation flow.",
+    "profile_requirements": "Student profiles MUST enforce LinkedIn URL addition. Include fields for GitHub, Behance, and Portfolio. Add Weekly Progress Logs functionality. Create an Admin Panel to view both profiles and check applications.",
+    "components_ui": "Use Shadcn UI (Forms, Tables, Dialogs, Selects) heavily but OVERRIDE their default styles to match the Dark/Glassmorphism/Neon aesthetic. Replace solid backgrounds on cards with `bg-white/5` and `backdrop-blur`.",
+    "animations": "Inject small animations everywhere. Button hover states should slightly scale up and increase their border glow. Job cards should lift off the page on hover (`-translate-y-1` with increased cyan shadow).",
+    "architecture_notes": "Structure the React app cleanly so API endpoints can easily point to a separately hosted backend (e.g., use an environment variable for the API base URL).",
+    "data_testid": "MANDATORY: Add `data-testid` to all interactive elements, buttons, links, and forms for automated testing."
+  }
+}
