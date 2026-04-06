@@ -93,7 +93,7 @@ export default function Login() {
                 <div className="relative">
                   <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
                   <input type="email" required value={form.email} onChange={e => setForm({...form, email: e.target.value})}
-                    className="glass-input w-full pl-10 pr-4 py-2.5 rounded-lg text-sm" placeholder="you@dbs.edu" data-testid="login-email" />
+                    className="glass-input w-full pl-10 pr-4 py-2.5 rounded-lg text-sm" placeholder="abc@gmail.com" data-testid="login-email" />
                 </div>
               </div>
               <div>
