@@ -96,22 +96,8 @@ const googleCallback = async (credential, role) => {
     setUser(userData);
   };
 
-const deleteInternship = async (id) => {
-    const token = localStorage.getItem("token");
-    return await axios.delete(`${API}/internships/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-};
-
-const deleteApplication = async (id) => {
-    const token = localStorage.getItem("token");
-    return await axios.delete(`${API}/applications/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-};
-
   return (
-    <AuthContext.Provider value={{ user, loading, token, login, register,user, deleteInternship, deleteApplication, adminRegister, googleCallback, logout, updateUser, axiosAuth }}>
+    <AuthContext.Provider value={{ user, loading, token, login, register, user, adminRegister, googleCallback, logout, updateUser, axiosAuth }}>
       {children}
     </AuthContext.Provider>
   );
