@@ -501,17 +501,6 @@ async def delete_internship(internship_id: str, request: Request):
     await db.internships.update_one({"internship_id": internship_id}, {"$set": {"status": "closed"}})
     return {"message": "Internship closed"}
 
-from bson import ObjectId
-
-# DELETE INTERNSHIP
-@app.delete("/api/internships/{id}")
-async def delete_internship(id: str, current_user = Depends(get_current_user)):
-    # Only Admin or the Company who posted it can delete
-    internship = await db.internships.find_one({"_id": ObjectId(id)})
-    if current_user["role"] == "admin" or str(internship["company_id"]) == str(current_user["_id"]):
-        await db.internships.delete_one({"_id": ObjectId(id)})
-        return {"message": "Deleted"}
-    raise HTTPException(status_code=403, detail="Not Authorized")
 
 # ==================== APPLICATION ENDPOINTS ====================
 
@@ -576,22 +565,6 @@ async def update_application_status(application_id: str, req: UpdateApplicationS
         {"$set": {"status": req.status, "updated_at": datetime.now(timezone.utc).isoformat()}}
     )
     return {"message": "Status updated", "status": req.status}
-
-# DELETE INTERNSHIP
-@app.delete("/api/internships/{id}")
-async def delete_internship(id: str, current_user = Depends(get_current_user)):
-    # Only Admin or the Company who posted it can delete
-    internship = await db.internships.find_one({"_id": ObjectId(id)})
-    if current_user["role"] == "admin" or str(internship["company_id"]) == str(current_user["_id"]):
-        await db.internships.delete_one({"_id": ObjectId(id)})
-        return {"message": "Deleted"}
-    raise HTTPException(status_code=403, detail="Not Authorized")
-
-# DELETE APPLICATION (For Students)
-@app.delete("/api/applications/{id}")
-async def delete_application(id: str, current_user = Depends(get_current_user)):
-    await db.applications.delete_one({"_id": ObjectId(id), "student_id": current_user["_id"]})
-    return {"message": "Withdrawn"}
     
 
 # ==================== WEEKLY LOG ENDPOINTS ====================
