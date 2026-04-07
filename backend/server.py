@@ -501,7 +501,6 @@ async def delete_internship(internship_id: str, request: Request):
     await db.internships.update_one({"internship_id": internship_id}, {"$set": {"status": "closed"}})
     return {"message": "Internship closed"}
 
-
 # ==================== APPLICATION ENDPOINTS ====================
 
 @api_router.post("/applications")
@@ -565,7 +564,6 @@ async def update_application_status(application_id: str, req: UpdateApplicationS
         {"$set": {"status": req.status, "updated_at": datetime.now(timezone.utc).isoformat()}}
     )
     return {"message": "Status updated", "status": req.status}
-    
 
 # ==================== WEEKLY LOG ENDPOINTS ====================
 
