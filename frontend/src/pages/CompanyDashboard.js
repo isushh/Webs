@@ -11,8 +11,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const SKILL_OPTIONS = ["JavaScript", "Python", "React", "Node.js", "Java", "C++", "TypeScript", "Flutter", "Django", "MongoDB", "SQL", "AWS", "Docker", "Figma", "UI/UX Design", "Data Science", "Machine Learning", "Content Writing", "Marketing"];
 
 export default function CompanyDashboard() {
-  const { user } = useAuth();
-  
+  const { user, token } = useAuth();
   const [tab, setTab] = useState("internships");
   const [internships, setInternships] = useState([]);
   const [applications, setApplications] = useState([]);
@@ -29,7 +28,6 @@ export default function CompanyDashboard() {
         axios.get(`${API}/internships`, { withCredentials: true, headers }),
         axios.get(`${API}/applications`, { withCredentials: true, headers }),
       ]);
-  
       const myInternships = (intRes.data.internships || []).filter(i => i.company_user_id === user?.user_id);
       setInternships(myInternships);
       setApplications(appRes.data.applications || []);
@@ -129,7 +127,6 @@ export default function CompanyDashboard() {
                     <span className="text-white/40">{intern.applications_count} applications</span>
                     <span className={intern.status === "active" ? "text-emerald-400" : "text-red-400"}>{intern.status}</span>
                   </div>
-      
                 </div>
                 {intern.skills_required?.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-3">

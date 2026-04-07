@@ -37,7 +37,7 @@ export default function AdminDashboard() {
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
   };
-  
+
   const verifyCompany = async (userId, status) => {
     try {
       await axios.put(`${API}/admin/companies/${userId}/verify`, { status, notes: "" }, { withCredentials: true, headers });
