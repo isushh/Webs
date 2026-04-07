@@ -97,7 +97,7 @@ const googleCallback = async (credential, role) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, token, login, register, user, adminRegister, googleCallback, logout, updateUser, axiosAuth }}>
+    <AuthContext.Provider value={{ user, loading, token, login, register, adminRegister, googleCallback, logout, updateUser, axiosAuth }}>
       {children}
     </AuthContext.Provider>
   );
