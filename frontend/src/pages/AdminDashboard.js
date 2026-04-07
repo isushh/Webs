@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
-import { Users, Building2, Briefcase, FileText, Check, Clock, BarChart3, Layout, Trash2, Edit3, XCircle from "lucide-react";
+import { Users, Building2, Briefcase, FileText, ShieldCheck, ShieldX, Clock, Eye, CheckCircle2, XCircle, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function AdminDashboard() {
-  const { token, deleteInternship, deleteApplication, deleteUser } = useAuth();
+  const { token } = useAuth();
   const [tab, setTab] = useState("overview");
   const [stats, setStats] = useState({});
   const [users, setUsers] = useState([]);
@@ -37,19 +37,7 @@ export default function AdminDashboard() {
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
   };
-const handleDelete = async (id, type) => {
-  if (!window.confirm(`Are you sure you want to delete this ${type}?`)) return;
   
-  try {
-    if (type === 'company' || type === 'student') await deleteUser(id);
-    if (type === 'application') await deleteApplication(id);
-    
-    toast.success(`${type} deleted successfully`);
-    loadData(); 
-  } catch (err) {
-    toast.error("Failed to delete " + type);
-  }
-};
   const verifyCompany = async (userId, status) => {
     try {
       await axios.put(`${API}/admin/companies/${userId}/verify`, { status, notes: "" }, { withCredentials: true, headers });
@@ -177,21 +165,6 @@ const handleDelete = async (id, type) => {
                     {a.status === "accepted" || a.status === "shortlisted" ? <CheckCircle2 size={14} /> : a.status === "rejected" ? <XCircle size={14} /> : <Clock size={14} />}
                     {a.status}
                   </span>
-                    <div className="flex items-center gap-2">
-  {/* The Edit Button */}
-  <button className="p-2 text-cyan-400 hover:bg-cyan-400/10 rounded-lg border border-cyan-400/20 transition-all">
-    <Edit3 size={16} />
-  </button>
-
-  {/* The Delete Button */}
-  <button 
-    onClick={() => handleDelete(app._id, 'application')}
-    className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg border border-red-500/20 transition-all"
-  >
-    <Trash2 size={16} />
-  </button>
-</div>
-      
                 </div>
               </div>
             ))}
